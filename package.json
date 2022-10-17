@@ -1,0 +1,12 @@
+{
+  "name": "Banking",
+  "version": "0.0.1",
+  "description": "Banking emulation",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": ["banking", "bank", "practice", "oop"],
+  "author": "Yun Taegyun, Han Sangjun",
+  "license": "UNLICENSED"
+}
