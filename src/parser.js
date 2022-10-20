@@ -1,5 +1,8 @@
+
 class Parser {
   constructor() {
+    this.users = [];
+
     this.availableCommands = {
       createUser: "create-user",
       createBank: "create-bank"
@@ -19,7 +22,7 @@ class Parser {
       .slice(commandTag.length, originalCommand.length)
       .trim();
   }
-
+cl
   /*
     getExtra()를 통해서 커맨드의 뒷 부분을 구하고, 이를 공백문자 기준으로 스플릿합니다.
     다음과 같이 사용할 것으로 기대하고 있습니다.
@@ -34,6 +37,7 @@ class Parser {
   }
 
   interpret(command) {
+   
     /* 
         테스트 용도입니다!
         */
@@ -47,7 +51,9 @@ class Parser {
         this.getExtraTokens(this.availableCommands.createUser, command);
       userAge = Number(userAge); // 원래는 NaN인지 예외처리가 필요하지만, 예외를 아직 안 배웠으므로 패스
       userInitialBudget = Number(userInitialBudget);
-
+      let newUser = new User(userName, userAge, userCountry, userInitialBudget);
+      this.users.push(newUser);
+      console.log(this.users);
       // todo 해당 유저 데이터를 처리할 것
       return;
     }
