@@ -1,11 +1,19 @@
-
+const User = require("./User"); // 함수처럼 생각하자
+const Bank = require("./Bank");
 class Parser {
   constructor() {
     this.users = [];
-
+    this.banks = [];
     this.availableCommands = {
       createUser: "create-user",
-      createBank: "create-bank"
+      createBank: "create-bank",
+      userEarns: "user-earns",
+      userUses: "user-uses",
+      userDepositsToBank: "user-deposits-to-bank",
+      userWithdrawsFromBank: "user-withdraws-from-bank",
+      bankIssuesInterestOfDays: "bank-issues-interest-of-days",
+      overallInfo: "overall-info"
+
       // todo 더 많은 커맨드를 추가하세요
     };
   }
@@ -22,7 +30,7 @@ class Parser {
       .slice(commandTag.length, originalCommand.length)
       .trim();
   }
-cl
+
   /*
     getExtra()를 통해서 커맨드의 뒷 부분을 구하고, 이를 공백문자 기준으로 스플릿합니다.
     다음과 같이 사용할 것으로 기대하고 있습니다.
@@ -37,7 +45,8 @@ cl
   }
 
   interpret(command) {
-   
+    const users = this.users;
+    const banks = this.banks;
     /* 
         테스트 용도입니다!
         */
@@ -47,22 +56,106 @@ cl
     }
 
     if (command.startsWith(this.availableCommands.createUser)) {
-      let [userName, userAge, userCountry, userInitialBudget] =
+      console.log("user");
+      let [userName, userAge, userCountry, userInitialBudget, userPw] =
         this.getExtraTokens(this.availableCommands.createUser, command);
       userAge = Number(userAge); // 원래는 NaN인지 예외처리가 필요하지만, 예외를 아직 안 배웠으므로 패스
       userInitialBudget = Number(userInitialBudget);
-      let newUser = new User(userName, userAge, userCountry, userInitialBudget);
-      this.users.push(newUser);
-      console.log(this.users);
+      let newUser = new User(
+        userName,
+        userAge,
+        userCountry,
+        userInitialBudget,
+        userPw
+      );
+      newUser.userId += 1; // 왜 안될까??
+      users.push(newUser);
+      console.log(users);
       // todo 해당 유저 데이터를 처리할 것
       return;
     }
 
     if (command.startsWith(this.availableCommands.createBank)) {
+      let [bankName, interest, userInitialBudget] = this.getExtraTokens(
+        this.availableCommands.createBank,
+        command
+      );
+      interest = Number(interest);
+      userInitialBudget = Number(userInitialBudget);
+      let newBank = new Bank(bankName, interest, userInitialBudget);
+      banks.push(newBank);
+      console.log(banks);
       // todo
       return;
     }
 
+    if (command.startsWith(this.availableCommands.userEarns)) {
+      let [userName, money, userId] = this.getExtraTokens(
+        this.availableCommands.userEarns,
+        command
+      );
+      money = Number(money);
+      users.map((a, i) => {
+        if (userName == a.userName) {
+          a.userEarns(userName, money, userId);
+          if (userId == a.userId) {
+            console.log(
+              `${a.userName}의 자산에서 ${money}원 입금 되었습니다. 유저자산 ${a.userInitialBudget}`
+            );
+          } else {
+            console.log("입금하려는 유저의 ID가 틀립니다.");
+          }
+        } else {
+          console.log("없는 고객 입니다");
+        }
+      });
+      return;
+    }
+
+    if (command.startsWith(this.availableCommands.userUses)) {
+      let [userName, money, userPw] = this.getExtraTokens(
+        this.availableCommands.userUses,
+        command
+      );
+      money = Number(money);
+      users.forEach((a, i) => {
+        if (userName == a.userName) {
+          if (userPw == a.userPw) {
+            a.userUses(userName, money);
+            console.log(
+              `${a.userName}의 자산에서 ${money}원 출금 되었습니다. 유저자산 ${a.userInitialBudget}`
+            );
+          } else {
+            console.log("비밀번호를 잘못 입력하였습니다.");
+          }
+        } else {
+          console.log("없는 고객 입니다");
+        }
+      });
+      return;
+    }
+
+    if (command.startsWith(this.availableCommands.userDepositsToBank)) {
+      let [userName, bankName, amount] = this.getExtraTokens(
+        this.availableCommands.userDepositsToBank,
+        command
+      );
+      amount = Number(amount);
+
+      banks.forEach((a) => {
+        if (a.bankName == bankName) {
+          a.userDepositsToBank(userName, bankName, amount);
+          console.log(
+            `${userName}님의 ${bankName}계좌로 ${amount}원 예치합니다 잔고${this.userInitialBudget}`
+          );
+          console.log(banks);
+        } else {
+          console.log("정보가 틀립니다.");
+        }
+      });
+
+      return;
+    }
     // 위에서 어떠한 커맨드에도 해당하지 않고, return되지 않았다면,
     console.error(
       "잘못된 커맨드를 입력하신 것으로 보입니다. 일치하는 커맨드를 찾을 수 없음."
