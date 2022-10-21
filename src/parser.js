@@ -95,16 +95,14 @@ class Parser {
         command
       );
       money = Number(money);
-      users.map((a, i) => {
+      users.forEach((a, i) => {
         if (userName == a.userName) {
           a.userEarns(userName, money, userId);
-          if (userId == a.userId) {
-            console.log(
-              `${a.userName}의 자산에서 ${money}원 입금 되었습니다. 유저자산 ${a.userInitialBudget}`
-            );
-          } else {
-            console.log("입금하려는 유저의 ID가 틀립니다.");
-          }
+
+          console.log(
+            `${a.userName}의 자산에서 ${money}원 입금 되었습니다. 유저자산 ${a.userInitialBudget}`
+          );
+
         } else {
           console.log("없는 고객 입니다");
         }
@@ -129,7 +127,7 @@ class Parser {
             console.log("비밀번호를 잘못 입력하였습니다.");
           }
         } else {
-          console.log("없는 고객 입니다");
+          console.log("고객이름과 비밀번호를 확인해주세요");
         }
       });
       return;
@@ -146,9 +144,9 @@ class Parser {
         if (a.bankName == bankName) {
           a.userDepositsToBank(userName, bankName, amount);
           console.log(
-            `${userName}님의 ${bankName}계좌로 ${amount}원 예치합니다 잔고${this.userInitialBudget}`
+            `${userName}님의 ${bankName}계좌로 ${amount}원 예치합니다.`
           );
-          console.log(banks);
+          console.log(a.userList);
         } else {
           console.log("정보가 틀립니다.");
         }
