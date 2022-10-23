@@ -76,13 +76,13 @@ class Parser {
     }
 
     if (command.startsWith(this.availableCommands.createBank)) {
-      let [bankName, interest, userInitialBudget] = this.getExtraTokens(
+      let [bankName, interest, bankInitialProperty] = this.getExtraTokens(
         this.availableCommands.createBank,
         command
       );
       interest = Number(interest);
-      userInitialBudget = Number(userInitialBudget);
-      let newBank = new Bank(bankName, interest, userInitialBudget);
+      bankInitialProperty = Number(bankInitialProperty);
+      let newBank = new Bank(bankName, interest, bankInitialProperty);
       banks.push(newBank);
       console.log(banks);
       // todo
@@ -102,7 +102,6 @@ class Parser {
           console.log(
             `${a.userName}의 자산에서 ${money}원 입금 되었습니다. 유저자산 ${a.userInitialBudget}`
           );
-
         } else {
           console.log("없는 고객 입니다");
         }
@@ -141,19 +140,42 @@ class Parser {
       amount = Number(amount);
 
       banks.forEach((a) => {
-        if (a.bankName == bankName) {
+        if (a.bankName == a.name) {
           a.userDepositsToBank(userName, bankName, amount);
           console.log(
-            `${userName}님의 ${bankName}계좌로 ${amount}원 예치합니다.`
+            `${userName}님께서 ${bankName}의 계좌에 ${amount}원 입금 하였습니다.`
           );
-          console.log(a.userList);
-        } else {
-          console.log("정보가 틀립니다.");
+        }else{
+          console.log('은행 이름이 잘못되었습니다 확인부탁드립니다.');
         }
       });
 
+      // banks.forEach((a) => {
+      //   if (a.bankName == bankName) {
+      //     a.userDepositsToBank(userName, bankName, amount);
+      //     console.log(
+      //       `${userName}님의 ${bankName}계좌로 ${amount}원 예치합니다.`
+      //     );
+      //     console.log(a.userList);
+      //   } else {
+      //     console.log("정보가 틀립니다.");
+      //   }
+      // });
+
       return;
     }
+
+    if (command.startsWith(this.availableCommands.overallInfo)) {
+      banks.forEach((a) => {
+        users.forEach((user) => {
+          console.log(a.userAccounts);
+          console.log(user);
+          console.log(`userAccounts:${a.userAccounts}`);
+        });
+      });
+      return;
+    }
+
     // 위에서 어떠한 커맨드에도 해당하지 않고, return되지 않았다면,
     console.error(
       "잘못된 커맨드를 입력하신 것으로 보입니다. 일치하는 커맨드를 찾을 수 없음."

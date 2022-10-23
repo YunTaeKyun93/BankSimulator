@@ -10,7 +10,8 @@ class User {
     // userId는 계좌번호 역할도 됨 
     // 유저가 관련된 모든 함수는 pw가 일치 할 시 하는 게 더 재밌어 보임
   }
-  userEarns(name, money,userId) {
+  userEarns(name, money, userId) {
+    console.log(this.userName)
     this.userInitialBudget += parseInt(money);
   }
   userUses(name, price , userPw) {
