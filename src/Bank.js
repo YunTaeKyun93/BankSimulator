@@ -39,15 +39,16 @@ class Bank {
     return bankAccount;
   }
 
-  userDepositsToBank(user, bank, amount) {
+  userDepositsToBank(user,bankName, amount) {
     // console.log("bankName", this.bankName);
     // console.log("user", user);
-  
+
     const bankAccount = this.createBankAccountIfDoesNotExist(user);
 
     // user.userInitialBudget -= amount; //
     this.bankProperty += amount; // 은행 잔고
     bankAccount.balance += amount; // 유저의 은행 계좌잔고
+    bankAccount.bankName = bankName;
   }
   // userDepositsToBank(user, amount/*userName, bankName, amount, userPw*/) {
   //   // 은행정보: this.
@@ -74,5 +75,11 @@ class Bank {
   //   // this.bankProperty += amount;
   //   // this.userInitialBudget += amount;
   // }
+  userWithdrawsFromBank(user, bank, amount) {
+    const bankAccount = this.createBankAccountIfDoesNotExist(user);
+    this.bankProperty -= amount;
+    bankAccount.balance -= amount;
+    bankAccount.bankName = bankName;
+  }
 }
 module.exports = Bank;

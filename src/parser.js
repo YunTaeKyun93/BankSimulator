@@ -139,38 +139,60 @@ class Parser {
       );
       amount = Number(amount);
 
-      banks.forEach((a) => {
-        if (a.bankName == a.name) {
-          a.userDepositsToBank(userName, bankName, amount);
+      banks.forEach((bank) => {
+        if (bank.bankName == bankName) {
+          bank.userDepositsToBank(userName, bankName, amount);
+          users.forEach((user) => {
+            if (user.userName == userName) {
+              user.userInitialBudget -= amount;
+              console.log(user.userInitialBudget);
+            }
+          });
           console.log(
             `${userName}님께서 ${bankName}의 계좌에 ${amount}원 입금 하였습니다.`
           );
-        }else{
-          console.log('은행 이름이 잘못되었습니다 확인부탁드립니다.');
+        } else {
+          console.log("은행 이름이 잘못되었습니다 확인부탁드립니다.");
         }
       });
 
-      // banks.forEach((a) => {
-      //   if (a.bankName == bankName) {
-      //     a.userDepositsToBank(userName, bankName, amount);
-      //     console.log(
-      //       `${userName}님의 ${bankName}계좌로 ${amount}원 예치합니다.`
-      //     );
-      //     console.log(a.userList);
-      //   } else {
-      //     console.log("정보가 틀립니다.");
-      //   }
-      // });
+      return;
+    }
+
+    if (command.startsWith(this.availableCommands.userWithdrawsFromBank)) {
+      let [userName, bankName, amount] = this.getExtraTokens(
+        this.availableCommands.userWithdrawsFromBank,
+        command
+      );
+      amount = Number(amount);
+
+      banks.forEach((bank) => {
+        if (bank.bankName == bankName) {
+          bank.userWithdrawsFromBank(userName, amount);
+          users.forEach((user) => {
+            if (user.userName == userName) {
+              user.userInitialBudget += amount;
+              console.log(user.userInitialBudget);
+            }
+          });
+          console.log(
+            `${userName}님께서 ${bankName}의 계좌에 ${amount}원 출금 하였습니다.`
+          );
+        } else {
+          console.log("은행 이름이 잘못되었습니다 확인부탁드립니다.");
+        }
+      });
 
       return;
     }
 
     if (command.startsWith(this.availableCommands.overallInfo)) {
-      banks.forEach((a) => {
+      banks.forEach((bank) => {
         users.forEach((user) => {
-          console.log(a.userAccounts);
+          console.log(bank.userAccounts);
           console.log(user);
-          console.log(`userAccounts:${a.userAccounts}`);
+          console.log(`userAccounts:${bank.userAccounts}`);
+          console.log(bank)
         });
       });
       return;

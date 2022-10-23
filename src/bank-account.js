@@ -1,8 +1,9 @@
 class BankAccount {
-    constructor(user, initialBalance) {
-        this.user = user;
-        this.balance = initialBalance;
-    }
+  constructor(user, bankName, initialBalance) {
+    this.user = user;
+    this.bankName = bankName;
+    this.balance = initialBalance;
+  }
 }
 
 module.exports = BankAccount;
