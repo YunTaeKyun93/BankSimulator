@@ -40,7 +40,7 @@ class Bank {
     let bankAccount = this.userAccounts.find(
       (userAccount) => userAccount.user === user
     );
-    console.log('bankAccount',bankAccount)
+    console.log("bankAccount", bankAccount);
 
     if (bankAccount == undefined) {
       const newBankAccount = new BankAccount(user, bankName, 0);
@@ -94,6 +94,14 @@ class Bank {
     this.bankProperty -= amount;
     bankAccount.balance -= amount;
     bankAccount.bankName = bankName;
+  }
+
+  bankIssuesInterestOfDays(user, bankName, period) {
+    const bankAccount = this.createBankAccountIfDoesNotExist(user, bankName);
+    const balance = bankAccount.balance;
+    const interestRate = this.interest + 1;
+    const totalInterst = balance * interestRate ** period;
+    return totalInterst;
   }
 }
 module.exports = Bank;

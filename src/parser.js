@@ -158,17 +158,43 @@ class Parser {
 
       return;
     }
-
-    if (command.startsWith(this.availableCommands.userWithdrawsFromBank)) {
+    if (command.startsWith(this.availableCommands.userDepositsToBank)) {
       let [userName, bankName, amount] = this.getExtraTokens(
-        this.availableCommands.userWithdrawsFromBank,
+        this.availableCommands.userDepositsToBank,
         command
       );
       amount = Number(amount);
 
       banks.forEach((bank) => {
         if (bank.bankName == bankName) {
-          bank.userWithdrawsFromBank(userName, bankName, amount);
+          bank.userDepositsToBank(userName, bankName, amount);
+          users.forEach((user) => {
+            if (user.userName == userName) {
+              user.userInitialBudget -= amount;
+              console.log(user.userInitialBudget);
+            }
+          });
+          console.log(
+            `${userName}님께서 ${bankName}의 계좌에 ${amount}원 입금 하였습니다.`
+          );
+        } else {
+          console.log("은행 이름이 잘못되었습니다 확인부탁드립니다.");
+        }
+      });
+
+      return;
+    }
+
+    if (command.startsWith(this.availableCommands.bankIssuesInterestOfDays)) {
+      let [userName, bankName, period] = this.getExtraTokens(
+        this.availableCommands.bankIssuesInterestOfDays,
+        command
+      );
+      amount = Number(period);
+
+      banks.forEach((bank) => {
+        if (bank.bankName == bankName) {
+          bank.bankIssuesInterestOfDays(userName, bankName, amount);
           users.forEach((user) => {
             if (user.userName == userName) {
               user.userInitialBudget += amount;
@@ -176,7 +202,7 @@ class Parser {
             }
           });
           console.log(
-            `${userName}님께서 ${bankName}의 계좌에 ${amount}원 출금 하였습니다.`
+            `${userName}님께서 ${bankName}의 계좌의 원리합계는 ${totalInterst}원입니다.`
           );
         } else {
           console.log("은행 이름이 잘못되었습니다 확인부탁드립니다.");
