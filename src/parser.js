@@ -168,7 +168,7 @@ class Parser {
 
       banks.forEach((bank) => {
         if (bank.bankName == bankName) {
-          bank.userWithdrawsFromBank(userName, amount);
+          bank.userWithdrawsFromBank(userName, bankName, amount);
           users.forEach((user) => {
             if (user.userName == userName) {
               user.userInitialBudget += amount;
@@ -189,10 +189,22 @@ class Parser {
     if (command.startsWith(this.availableCommands.overallInfo)) {
       banks.forEach((bank) => {
         users.forEach((user) => {
-          console.log(bank.userAccounts);
-          console.log(user);
-          console.log(`userAccounts:${bank.userAccounts}`);
-          console.log(bank)
+          console.log(`뱅킹 시물레이션 정보
+         ********************************************************************************
+         
+         유저
+         ********************************************************************************
+        ${user.userName}, ${user.userAge}살, ${user.userCountry} 거주, ${user.userInitialBudget} USD 보유중.
+           계좌
+           ${bank.bankName}에 ${bank.balance} USD 예치중.
+         
+         
+      
+         
+         은행
+         ********************************************************************************
+         ${bank.bankName}, 매일 ${bank.interest}% 이자 발행, ${bank.bankProperty} USD 보유중.
+         `);
         });
       });
       return;

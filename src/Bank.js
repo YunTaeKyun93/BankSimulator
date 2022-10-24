@@ -21,16 +21,30 @@ class Bank {
     // 입금 출금 할 시 이름과 아이디 값으로 해당 계좌 입장 가능
   }
 
-  createBankAccountIfDoesNotExist(user) {
+  // createBankAccountIfDoesNotExist(user) {
+  //   let bankAccount = this.userAccounts.find(
+  //     (userAccount) => userAccount.user.name === user
+  //   );
+
+  //   if (bankAccount == null) {
+  //     const newBankAccount = new BankAccount(user, 0);
+  //     this.userAccounts.push(newBankAccount);
+  //     bankAccount = newBankAccount;
+  //     console.log(`${user}님의 계좌가 신설 되었습니다.`);
+  //   } else {
+  //     console.log(`${user}님의 계좌가 확인 되었습니다.`);
+  //   }
+  //   return bankAccount;
+  // }
+  createBankAccountIfDoesNotExist(user, bankName) {
     let bankAccount = this.userAccounts.find(
-      (userAccount) => userAccount.user.name === user
+      (userAccount) => userAccount.user === user
     );
+    console.log('bankAccount',bankAccount)
 
-    if (bankAccount == null) {
-      const newBankAccount = new BankAccount(user, 0);
-
+    if (bankAccount == undefined) {
+      const newBankAccount = new BankAccount(user, bankName, 0);
       this.userAccounts.push(newBankAccount);
-
       bankAccount = newBankAccount;
       console.log(`${user}님의 계좌가 신설 되었습니다.`);
     } else {
@@ -39,11 +53,11 @@ class Bank {
     return bankAccount;
   }
 
-  userDepositsToBank(user,bankName, amount) {
+  userDepositsToBank(user, bankName, amount) {
     // console.log("bankName", this.bankName);
     // console.log("user", user);
 
-    const bankAccount = this.createBankAccountIfDoesNotExist(user);
+    const bankAccount = this.createBankAccountIfDoesNotExist(user, bankName);
 
     // user.userInitialBudget -= amount; //
     this.bankProperty += amount; // 은행 잔고
@@ -75,8 +89,8 @@ class Bank {
   //   // this.bankProperty += amount;
   //   // this.userInitialBudget += amount;
   // }
-  userWithdrawsFromBank(user, bank, amount) {
-    const bankAccount = this.createBankAccountIfDoesNotExist(user);
+  userWithdrawsFromBank(user, bankName, amount) {
+    const bankAccount = this.createBankAccountIfDoesNotExist(user, bankName);
     this.bankProperty -= amount;
     bankAccount.balance -= amount;
     bankAccount.bankName = bankName;
