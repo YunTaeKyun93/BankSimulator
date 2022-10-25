@@ -44,6 +44,27 @@ class Parser {
     return extra.split(" ");
   }
 
+  findUserByName(userName) {
+    const user = this.users.find(
+      (currentUser) => currentUser.userName === userName
+    );
+
+    if (user == null) {
+      throw new Error(`${userName}을 이름으로 가진 유저를 찾을 수 없습니다.`);
+    }
+
+    return user;
+  }
+
+  findBankByName(bankName) {
+    const bank = this.banks.find(
+      (currentBank) => currentBank.bankName === bankName
+    );
+    if (bank == null) {
+      throw new Error(`${bankName}을 이름으로 가진 은행을 찾을 수 없습니다.`);
+    }
+    return bank;
+  }
   interpret(command) {
     const users = this.users;
     const banks = this.banks;
@@ -56,11 +77,13 @@ class Parser {
     }
 
     if (command.startsWith(this.availableCommands.createUser)) {
-      console.log("user");
+      // 사용자로부터 데이터를 읽음
       let [userName, userAge, userCountry, userInitialBudget, userPw] =
         this.getExtraTokens(this.availableCommands.createUser, command);
       userAge = Number(userAge); // 원래는 NaN인지 예외처리가 필요하지만, 예외를 아직 안 배웠으므로 패스
       userInitialBudget = Number(userInitialBudget);
+
+      // 유저를 생성 및 삽입
       let newUser = new User(
         userName,
         userAge,
@@ -68,10 +91,9 @@ class Parser {
         userInitialBudget,
         userPw
       );
-      newUser.userId += 1; // 왜 안될까??
       users.push(newUser);
+
       console.log(users);
-      // todo 해당 유저 데이터를 처리할 것
       return;
     }
 
@@ -82,53 +104,57 @@ class Parser {
       );
       interest = Number(interest);
       bankInitialProperty = Number(bankInitialProperty);
+
       let newBank = new Bank(bankName, interest, bankInitialProperty);
       banks.push(newBank);
+
       console.log(banks);
-      // todo
       return;
     }
 
     if (command.startsWith(this.availableCommands.userEarns)) {
-      let [userName, money, userId] = this.getExtraTokens(
+      let [userName, money] = this.getExtraTokens(
         this.availableCommands.userEarns,
         command
       );
       money = Number(money);
-      users.forEach((a, i) => {
-        if (userName == a.userName) {
-          a.userEarns(userName, money, userId);
 
-          console.log(
-            `${a.userName}의 자산에서 ${money}원 입금 되었습니다. 유저자산 ${a.userInitialBudget}`
-          );
-        } else {
-          console.log("없는 고객 입니다");
-        }
-      });
+      // 유저를 찾는 것
+      const user = this.findUserByName(userName);
+
+      // 돈을 버는 것
+      user.userEarns(money);
+
+      // 현재 상황 출력
+      console.log(
+        `${user.userName}의 자산에서 ${money}원 입금 되었습니다. 유저자산 ${user.userInitialBudget}`
+      );
+
       return;
+
+      // 다른 것과 식별할 수 있는 변수명, 그러면서 짧으면
+      // period discountAmount userKind depositAmount
+      // 다른 것과 식별이 안 되는 변수명
+      // date number scale int decimal string
     }
 
     if (command.startsWith(this.availableCommands.userUses)) {
-      let [userName, money, userPw] = this.getExtraTokens(
+      let [userName, money] = this.getExtraTokens(
         this.availableCommands.userUses,
         command
       );
       money = Number(money);
-      users.forEach((a, i) => {
-        if (userName == a.userName) {
-          if (userPw == a.userPw) {
-            a.userUses(userName, money);
-            console.log(
-              `${a.userName}의 자산에서 ${money}원 출금 되었습니다. 유저자산 ${a.userInitialBudget}`
-            );
-          } else {
-            console.log("비밀번호를 잘못 입력하였습니다.");
-          }
-        } else {
-          console.log("고객이름과 비밀번호를 확인해주세요");
-        }
-      });
+
+      // 유저를 찾는 것
+      const user = this.findUserByName(userName);
+      // 유저가 돈을 쓰는 것
+      user.userUses(money);
+
+      // 현재 상황 출력
+      console.log(
+        `${user.userName}의 자산에서 ${money}원 출금 되었습니다. 유저자산 ${user.userInitialBudget}`
+      );
+
       return;
     }
 
@@ -139,100 +165,81 @@ class Parser {
       );
       amount = Number(amount);
 
-      banks.forEach((bank) => {
-        if (bank.bankName == bankName) {
-          bank.userDepositsToBank(userName, bankName, amount);
-          users.forEach((user) => {
-            if (user.userName == userName) {
-              user.userInitialBudget -= amount;
-              console.log(user.userInitialBudget);
-            }
-          });
-          console.log(
-            `${userName}님께서 ${bankName}의 계좌에 ${amount}원 입금 하였습니다.`
-          );
-        } else {
-          console.log("은행 이름이 잘못되었습니다 확인부탁드립니다.");
-        }
-      });
+      const user = this.findUserByName(userName);
+      const bank = this.findBankByName(bankName);
+
+      bank.userDepositsToBank(user, amount);
+
+      console.log(
+        `${userName}님께서 ${bankName}의 계좌에 ${amount}원 입금 하였습니다.`
+      );
 
       return;
     }
-    if (command.startsWith(this.availableCommands.userDepositsToBank)) {
+    if (command.startsWith(this.availableCommands.userWithdrawsFromBank)) {
       let [userName, bankName, amount] = this.getExtraTokens(
-        this.availableCommands.userDepositsToBank,
+        this.availableCommands.userWithdrawsFromBank,
         command
       );
       amount = Number(amount);
 
-      banks.forEach((bank) => {
-        if (bank.bankName == bankName) {
-          bank.userDepositsToBank(userName, bankName, amount);
-          users.forEach((user) => {
-            if (user.userName == userName) {
-              user.userInitialBudget -= amount;
-              console.log(user.userInitialBudget);
-            }
-          });
-          console.log(
-            `${userName}님께서 ${bankName}의 계좌에 ${amount}원 입금 하였습니다.`
-          );
-        } else {
-          console.log("은행 이름이 잘못되었습니다 확인부탁드립니다.");
-        }
-      });
+      const user = this.findUserByName(userName);
+      const bank = this.findBankByName(bankName);
+
+      bank.userWithdrawsFromBank(user, amount);
+
+      console.log(
+        `${userName}님께서 ${bankName}의 계좌에 ${amount}원 출금 하였습니다.`
+      );
 
       return;
     }
 
     if (command.startsWith(this.availableCommands.bankIssuesInterestOfDays)) {
-      let [userName, bankName, period] = this.getExtraTokens(
+      let [bankName, periodInDays] = this.getExtraTokens(
         this.availableCommands.bankIssuesInterestOfDays,
         command
       );
-      amount = Number(period);
+      periodInDays = Number(periodInDays);
 
-      banks.forEach((bank) => {
-        if (bank.bankName == bankName) {
-          bank.bankIssuesInterestOfDays(userName, bankName, amount);
-          users.forEach((user) => {
-            if (user.userName == userName) {
-              user.userInitialBudget += amount;
-              console.log(user.userInitialBudget);
-            }
-          });
-          console.log(
-            `${userName}님께서 ${bankName}의 계좌의 원리합계는 ${totalInterst}원입니다.`
-          );
-        } else {
-          console.log("은행 이름이 잘못되었습니다 확인부탁드립니다.");
-        }
-      });
+      const bank = this.findBankByName(bankName);
+      bank.bankIssuesInterestOfDays(periodInDays);
 
       return;
     }
 
     if (command.startsWith(this.availableCommands.overallInfo)) {
-      banks.forEach((bank) => {
-        users.forEach((user) => {
-          console.log(`뱅킹 시물레이션 정보
-         ********************************************************************************
-         
-         유저
-         ********************************************************************************
-        ${user.userName}, ${user.userAge}살, ${user.userCountry} 거주, ${user.userInitialBudget} USD 보유중.
-           계좌
-           ${bank.bankName}에 ${bank.balance} USD 예치중.
-         
-         
-      
-         
-         은행
-         ********************************************************************************
-         ${bank.bankName}, 매일 ${bank.interest}% 이자 발행, ${bank.bankProperty} USD 보유중.
-         `);
-        });
-      });
+      const printUser = (user) => {
+        const printBankAccount = (bank) => {
+          const userBankAccount = bank.getAccountByUserNameSafely(user.userName);
+
+          if (userBankAccount == null) {
+            return;
+          }
+
+          console.log(`  ${bank.bankName}: ${userBankAccount.balance}`);
+        };
+
+        console.log(`User(name: ${user.userName}, country: ${user.userCountry}, age: ${user.userAge}, budget: ${user.userInitialBudget})`);
+
+        banks.forEach(printBankAccount);
+      };
+
+      const printBank = (bank) => {
+        console.log(`Bank(name: ${bank.bankName}, interest: ${bank.interest}, budget: ${bank.bankProperty})`);
+      };
+
+
+
+
+      console.log('**********');
+      console.log('유저');
+      console.log('**********');
+
+      users.forEach(printUser);
+
+      banks.forEach(printBank);
+
       return;
     }
 
