@@ -1,5 +1,6 @@
-const User = require("./User"); // 함수처럼 생각하자
+const User = require("./Store/User"); // 함수처럼 생각하자
 const Bank = require("./Bank");
+
 class Parser {
   constructor() {
     this.users = [];
@@ -39,6 +40,9 @@ class Parser {
     userAge = Number(userAge); // 나이와 예산은 문자열이 아닌 숫자이어야하므로
     userInitialBudget = Number(userInitialBudget);
     */
+      // commandTag = create-user
+   //originalCommand =  create-user jack 20 kr 2000 123
+
   getExtraTokens(commandTag, originalCommand) {
     const extra = this.getExtra(commandTag, originalCommand);
     return extra.split(" ");
@@ -77,6 +81,8 @@ class Parser {
     }
 
     if (command.startsWith(this.availableCommands.createUser)) {
+      console.log(command)
+      console.log(this.availableCommands.createUser)
       // 사용자로부터 데이터를 읽음
       let [userName, userAge, userCountry, userInitialBudget, userPw] =
         this.getExtraTokens(this.availableCommands.createUser, command);
@@ -211,7 +217,9 @@ class Parser {
     if (command.startsWith(this.availableCommands.overallInfo)) {
       const printUser = (user) => {
         const printBankAccount = (bank) => {
-          const userBankAccount = bank.getAccountByUserNameSafely(user.userName);
+          const userBankAccount = bank.getAccountByUserNameSafely(
+            user.userName
+          );
 
           if (userBankAccount == null) {
             return;
@@ -220,21 +228,22 @@ class Parser {
           console.log(`  ${bank.bankName}: ${userBankAccount.balance}`);
         };
 
-        console.log(`User(name: ${user.userName}, country: ${user.userCountry}, age: ${user.userAge}, budget: ${user.userInitialBudget})`);
+        console.log(
+          `User(name: ${user.userName}, country: ${user.userCountry}, age: ${user.userAge}, budget: ${user.userInitialBudget})`
+        );
 
         banks.forEach(printBankAccount);
       };
 
       const printBank = (bank) => {
-        console.log(`Bank(name: ${bank.bankName}, interest: ${bank.interest}, budget: ${bank.bankProperty})`);
+        console.log(
+          `Bank(name: ${bank.bankName}, interest: ${bank.interest}, budget: ${bank.bankProperty})`
+        );
       };
 
-
-
-
-      console.log('**********');
-      console.log('유저');
-      console.log('**********');
+      console.log("**********");
+      console.log("유저");
+      console.log("**********");
 
       users.forEach(printUser);
 

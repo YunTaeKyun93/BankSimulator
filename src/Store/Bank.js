@@ -37,7 +37,6 @@ class Bank {
     const bankAccount = this.createBankAccountIfDoesNotExist(user);
     this.bankProperty -= amount;
     bankAccount.balance -= amount;
-
     user.userInitialBudget += amount;
   }
 
