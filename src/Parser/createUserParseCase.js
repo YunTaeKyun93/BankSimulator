@@ -1,6 +1,7 @@
 const ParseCase = require("./parseCase");
 const ParseUtils = require("./ParseUtils");
-const CreateUserParseAction = require("../Action/createUserAction");
+const CreateUserAction = require("../Action/createUserAction");
+
 class CreateUserParseCase extends ParseCase {
   static expectedCommandPrefix = "create-user";
   /**  @memo 커맨드가 지정한 걸로 시작했는지 여부 체크 */
@@ -18,7 +19,7 @@ class CreateUserParseCase extends ParseCase {
     userAge = Number(userAge);
     userInitialBudget = Number(userInitialBudget);
 
-    return new CreateUserParseAction({ userName, userAge, userCountry, userInitialBudget });
+    return new CreateUserAction({ userName, userAge, userCountry, userInitialBudget });
   }
 }
 

@@ -5,11 +5,13 @@ class User {
     this.userCountry = userCountry;
     this.userInitialBudget = userInitialBudget;
   }
-  userEarns(money) {
-    this.userInitialBudget += parseInt(money);
+  userEarns(earnsAmount) {
+    this.userInitialBudget += parseInt(earnsAmount);
+    console.log('earnsAmout')
   }
-  userUses(price) {
-    this.userInitialBudget -= parseInt(price);
+  userUses(usesAmount) {
+    this.userInitialBudget -= parseInt(usesAmount)
+    console.log('usesAmount');
   }
 }
 module.exports = User;

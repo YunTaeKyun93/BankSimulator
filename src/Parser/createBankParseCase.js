@@ -1,6 +1,6 @@
 const ParseCase = require("./parseCase");
 const ParseUtils = require("./ParseUtils");
-const CreateBankParseAction = require('../Action/createBankAction');
+const CreateBankAction = require('../Action/createBankAction');
 
 class CreateBankParseCase extends ParseCase {
   static expectedCommandPrefix = "create-bank";
@@ -9,7 +9,7 @@ class CreateBankParseCase extends ParseCase {
     return command.startsWith(this.constructor.expectedCommandPrefix);
   }
   tryParse(command) {
-    if (!this.isParsable) {
+    if (!this.isParsable(command)) {
       return undefined;
     }
     let [bankName, bankInterest, bankInitialBudget] = ParseUtils.getExtraTokens(
@@ -17,7 +17,7 @@ class CreateBankParseCase extends ParseCase {
       command
     );
     bankInitialBudget = Number(bankInitialBudget);
-    return new CreateBankParseAction({ bankName, bankInterest, bankInitialBudget });
+    return new CreateBankAction({ bankName, bankInterest, bankInitialBudget });
   }
 }
 

@@ -8,8 +8,13 @@ class ShowBankAction extends Action {
     const showBank = (bank) => {
       console.log(bank);
     };
+  
     this.context.banks.forEach(showBank);
+  
   }
 }
 
 module.exports = ShowBankAction;
+
+
+

@@ -1,7 +1,7 @@
 const ReadLine = require("./read-line");
 const Parser = require("./Parser/paserReboot");
 const Context = require("./Store/store");
-
+const ParseAndRun = require("./parseAndRun");
 // const Parser = require("./parser");
 const NoMatchingCommandError = require("./noMatchingCommandError");
 
@@ -21,46 +21,46 @@ class App {
   getParseCase() {
     return [
       new CreateUserParseCase(),
-      new ShowUserParseCase(),
       new CreateBankParseCase(),
+      new ShowUserParseCase(),
       new ShowBankParseCase(),
       new UserEarnsParseCase(),
       new UserUsesParseCase(),
-      new BankIssuesInterestOfDaysParseCase(),
       new UserDepositsToBankParseCase(),
-      new UserWithdrawsFromBankParseCase()
+      new UserWithdrawsFromBankParseCase(),
+      new BankIssuesInterestOfDaysParseCase()
     ];
   }
 
-  //   tryParseAndRun(command) {
-  //     const action = this.parser.getAction(command);
-  //     action.context = this.context; // 이 부분 모르겠음
-  //     action.run(); // 이 부분 모르겠음
-  //   }
-  //   parseAndRun(command) {
-  //     try {
-  //       this.tryParseAndRun(command);
-  //     } catch (error) {
-  //       if (error instanceof NoMatchingCommandError) {
-  //         console.error("잘못된 명령어를 입력하셨습니다. 방금 입력한 명령어:");
-  //         console.log(e.command);
-  //         return;
-  //       }
-  //       throw error;
-  //     }
-  //   }
+  tryParseAndRun(command) {
+    const action = this.parser.getAction(command);
+    action.context = this.context; // 이 부분 모르겠음
+    action.run(); // 이 부분 모르겠음
+  }
+  parseAndRun(command) {
+    try {
+      this.tryParseAndRun(command);
+    } catch (error) {
+      if (error instanceof NoMatchingCommandError) {
+        console.error("잘못된 명령어를 입력하셨습니다. 방금 입력한 명령어:");
+        console.log(e.command);
+        return;
+      }
+      throw error;
+    }
+  }
   run() {
     this.readLine = new ReadLine();
     this.context = new Context();
     this.parser = new Parser(this.getParseCase());
-    this.parseAndRun = new ParseAndRun();
+    // this.parseAndRun = new ParseAndRun();
 
     const readLine = this.readLine;
     const context = this.context;
     const parser = this.parser;
-    const parseAndRun = this.ParseAndRun;
+    // const parseAndRun = this.ParseAndRun;
 
-    readLine.registerCallback((text) => parseAndRun.parseAndRun(text));
+    readLine.registerCallback((text) => this.parseAndRun(text));
   }
 }
 

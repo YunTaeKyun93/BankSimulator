@@ -1,16 +1,17 @@
 const Action = require("./action");
 
 class UserEarnsAction extends Action {
-  constructor({ name, earnsAmount }) {
+  constructor({ userName, earnsAmount }) {
     super();
-    this.name = name;
+    this.userName = userName;
     this.earnsAmount = earnsAmount;
   }
   run() {
     const selectUser = this.context.users.find(
-      (user) => user.name == this.name
+      (user) => user.userName == this.userName
     );
     selectUser.userEarns(this.earnsAmount);
+    console.log('userEarns',selectUser)
   }
 }
 

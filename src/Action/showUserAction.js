@@ -10,6 +10,7 @@ class ShowUserAction extends Action{
         }
         this.context.users.forEach(showUser);
         
+        
     }
 }
 

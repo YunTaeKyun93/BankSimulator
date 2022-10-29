@@ -1,6 +1,5 @@
-const ShowUserAction = require("../Action/showUserAction");
 const ParseCase = require("./parseCase");
-
+const ShowUserAction = require("../Action/showUserAction");
 
 class ShowUserParseCase extends ParseCase {
   static expectedCommandPrefix = "show-user";

@@ -10,8 +10,8 @@ class CreateBankAction extends Action {
   }
 
   run() {
-    const bank = new Bank(this.bankName, this.bankInterest, this.bankInitialBudget);
-    this.context.banks.push(bank);
+    const newBank = new Bank(this.bankName, this.bankInterest, this.bankInitialBudget);
+    this.context.banks.push(newBank);
   }
 }
 

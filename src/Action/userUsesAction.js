@@ -1,17 +1,18 @@
 const Action = require("./action");
 
-class UserUsessAction extends Action {
-  constructor({ name, usesAmount }) {
+class UserUsesAction extends Action {
+  constructor({ userName, usesAmount }) {
     super();
-    this.name = name;
+    this.userName = userName;
     this.usesAmount = usesAmount;
   }
   run() {
-    const userUses = (user) => {
-        const selectUser = this.context.users.find(user=>user.name == this.name);
-        selectUser.userUses(this.usesAmount);
-    };
+    const selectUser = this.context.users.find(
+      (user) => user.userName == this.userName
+    );
+    selectUser.userUses(this.usesAmount);
+    console.log('userUses',selectUser)
   }
 }
 
-module.exports = UserUsessAction;
+module.exports = UserUsesAction;

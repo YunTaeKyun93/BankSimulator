@@ -1,6 +1,6 @@
 const ParseCase = require("./parseCase");
 const ParseUtils = require("./ParseUtils");
-const UserUsesParseAction = require("../Action/userUsesAction");
+const UserUsesAction = require("../Action/userUsesAction");
 
 class UserUsesParseCase extends ParseCase {
   static expectedCommandPrefix = "user-uses";
@@ -12,12 +12,14 @@ class UserUsesParseCase extends ParseCase {
     if (!this.isParsable) {
       return undefined;
     }
-    let [name, usesAmount] = ParseUtils.getExtraTokens(
+    let [userName, usesAmount] = ParseUtils.getExtraTokens(
       this.constructor.expectedCommandPrefix,
       command
     );
-    earnsAmount = Number(earnsAmount);
-    return new UserUsesParseAction({ name, earnsAmount });
+    usesAmount = Number(usesAmount);
+    console.log("2",command)
+    console.log('userUsesON')
+    return new UserUsesAction({ userName, usesAmount });
   }
 }
 
