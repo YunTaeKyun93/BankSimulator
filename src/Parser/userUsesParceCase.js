@@ -9,7 +9,7 @@ class UserUsesParseCase extends ParseCase {
     return command.startsWith(this.constructor.expectedCommandPrefix);
   }
   tryParse(command) {
-    if (!this.isParsable) {
+    if (!this.isParsable(command)) {
       return undefined;
     }
     let [userName, usesAmount] = ParseUtils.getExtraTokens(

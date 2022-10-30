@@ -12,9 +12,11 @@ class UserDepositsToBankAction extends Action{
         // const user = this.constext.users.find(
         //     (currentUser) => currentUser.userName === userName
         //   );
-       const selectUser = this.context.users.findUserByName(this.userName);
-       const selectBank = this.context.banks.findBankByName(this.bankName);
-        selectBank.userDepositsToBank(selectUser, this.bankName);
+       const selectUser = this.findUserByName(this.userName);
+       const selectBank = this.findBankByName(this.bankName);
+        selectBank.userDepositsToBank(selectUser, this.depositsAmout);
 
     }
 }
+
+module.exports = UserDepositsToBankAction;

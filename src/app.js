@@ -14,6 +14,8 @@ const UserUsesParseCase = require("./Parser/userUsesParceCase");
 const UserDepositsToBankParseCase = require("./Parser/userDepositsToBankParseCase");
 const UserWithdrawsFromBankParseCase = require("./Parser/userWithdrawsFromBankParseCase");
 const BankIssuesInterestOfDaysParseCase = require("./Parser/bankIssuesInterestOfDaysParseCase");
+const IgnoreEmptyLineParseCase = require('./Parser/ignoreEmptyLineParseCase');
+const OverallInfoParseCase = require("./Parser/overallInfoParseCase");
 
 const Test = require("./test");
 
@@ -28,7 +30,9 @@ class App {
       new UserUsesParseCase(),
       new UserDepositsToBankParseCase(),
       new UserWithdrawsFromBankParseCase(),
-      new BankIssuesInterestOfDaysParseCase()
+      new BankIssuesInterestOfDaysParseCase(),
+      new IgnoreEmptyLineParseCase(),
+      new OverallInfoParseCase(),
     ];
   }
 
@@ -43,7 +47,7 @@ class App {
     } catch (error) {
       if (error instanceof NoMatchingCommandError) {
         console.error("잘못된 명령어를 입력하셨습니다. 방금 입력한 명령어:");
-        console.log(e.command);
+        console.log(error.command);
         return;
       }
       throw error;

@@ -1,4 +1,4 @@
-const BankIssuesInterestOfDaysAction = require("../Action/BankIssuesInterestOfDaysAction");
+const BankIssuesInterestOfDaysAction = require("../Action/bankIssuesInterestOfDaysAction");
 const ParseCase = require("./parseCase");
 const ParseUtils = require("./ParseUtils");
 

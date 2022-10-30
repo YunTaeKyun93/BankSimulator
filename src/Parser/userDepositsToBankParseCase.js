@@ -19,7 +19,7 @@ class UserDepositsToBankParseCase extends ParseCase {
     );
     depositAmount = Number(depositAmount);
 
-    return new UserDepositsToBankParseCase({userName,bankName,depositAmount})
+    return new UserDepositsToBankAction({userName,bankName,depositsAmout: depositAmount})
   }
 }
 

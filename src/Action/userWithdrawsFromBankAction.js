@@ -6,14 +6,14 @@ class UserWithdrawsFromBankAction extends Action{
         super();
         this.userName = userName;
         this.bankName = bankName;
-        this.depositsAmount = depositsAmount;
+        this.depositsAmount = depositsAmout;
     }
     run(){
         // const user = this.constext.users.find(
         //     (currentUser) => currentUser.userName === userName
         //   );
-       const selectUser = this.context.users.findUserByName(this.userName);
-       const selectBank = this.context.banks.findBankByName(this.bankName);
+       const selectUser = this.findUserByName(this.userName);
+       const selectBank = this.findBankByName(this.bankName);
         selectBank.userWithdrawsFromBank(selectUser, this.depositsAmount);
 
     }

@@ -2,7 +2,7 @@ const ParseCase = require("./parseCase");
 const ParseUtils = require("./ParseUtils");
 const UserWithdrawsFromBankAction = require('../Action/userWithdrawsFromBankAction');
 class UserWithdrawsFromBankParseCase extends ParseCase {
-  static expectedCommandPrefix = "user-deposits-to-bank";
+  static expectedCommandPrefix = "user-withdraws-from-bank";
 
   isParsable(command) {
     return command.startsWith(this.constructor.expectedCommandPrefix);
@@ -17,7 +17,7 @@ class UserWithdrawsFromBankParseCase extends ParseCase {
     );
     depositAmount = Number(depositAmount);
 
-    return new UserWithdrawsFromBankAction({userName,bankName,depositAmount})
+    return new UserWithdrawsFromBankAction({userName,bankName,depositsAmout: depositAmount})
   }
 }
 

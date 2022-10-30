@@ -1,0 +1,28 @@
+create-user Jack 24 Korea 1000
+create-user Sam 27 Canada 2000
+
+create-bank XBank 1.3 1000000
+create-bank KBank 3.5 50000
+
+overall-info
+
+user-earns Jack 50
+
+overall-info
+
+user-uses Sam 500
+
+overall-info
+
+user-deposits-to-bank Sam KBank 500 
+
+overall-info
+
+bank-issues-interest-of-days KBank 10
+
+overall-info
+
+user-withdraws-from-bank Sam KBank 700
+
+overall-info
+

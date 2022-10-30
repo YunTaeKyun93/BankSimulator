@@ -1,7 +1,8 @@
 const ParseCase = require("./parseCase");
+const OverallInfoAction = require('../Action/overallInfoAction');
 
 class OverallInfoParseCase extends ParseCase {
-  static expectedCommandPrefix = "create-user";
+  static expectedCommandPrefix = "overall-info";
 
   isParsable(command) {
     return command.startsWith(this.constructor.expectedCommandPrefix);
@@ -15,3 +16,5 @@ class OverallInfoParseCase extends ParseCase {
 
   
 }
+
+module.exports = OverallInfoParseCase;

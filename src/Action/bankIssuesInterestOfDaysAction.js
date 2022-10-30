@@ -9,7 +9,7 @@ class BankIssuesInterestOfDaysAction extends Action{
     }
  
     run(){
-        const selectBank = this.context.banks.findBankByName(this.bankName);
+        const selectBank = this.findBankByName(this.bankName);
         selectBank.bankIssuesInterestOfDays(this.interestPeriod);
     }
 }
